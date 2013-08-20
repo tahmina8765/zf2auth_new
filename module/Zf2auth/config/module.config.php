@@ -4,7 +4,7 @@ namespace Zf2auth;
 return array(
     'controllers' => array(
         'invokables' => array(
-            
+            'Zf2auth\Controller\Zf2auth' => 'Zf2auth\Controller\Zf2authController',
             'Zf2auth\Controller\Album' => 'Zf2auth\Controller\AlbumController',
             'Zf2auth\Controller\Fbprofiles' => 'Zf2auth\Controller\FbprofilesController',
             'Zf2auth\Controller\Profiles' => 'Zf2auth\Controller\ProfilesController',
@@ -17,6 +17,23 @@ return array(
     ),
     'router' => array(
         'routes' => array(
+            'zf2auth' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/zf2auth[/:action][/:id][/page/:page][/order_by/:order_by][/:order][/search_by/:search_by]',
+                    'constraints' => array(
+                        'action'    => '(?!\bpage\b)(?!\border_by\b)(?!\bsearch_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                        'page' => '[0-9]+',
+                        'order_by' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'order' => 'ASC|DESC',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Zf2auth\Controller\Zf2auth',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
             'album' => array(
                 'type'    => 'segment',
                 'options' => array(
@@ -153,12 +170,12 @@ return array(
                     ),
                 ),
             ),
-            
+
         ),
     ),
     'view_manager' => array(
         'template_path_stack' => array(
-            
+            'zf2auth' => __DIR__ . '/../view',
             'album' => __DIR__ . '/../view',
             'fbprofiles' => __DIR__ . '/../view',
             'profiles' => __DIR__ . '/../view',
