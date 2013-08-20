@@ -1,0 +1,12 @@
+<?php
+$title = 'Bind Resources with roles';
+$this->headTitle($title);
+
+if (!empty($allNode)) {
+    foreach ($allNode as $data) {
+        ?>
+        <a href="<?php echo $this->url($data); ?>"><?php echo $this->translate($data); ?></a><br>
+        <?php
+    }
+}
+?>
