@@ -16,16 +16,20 @@ class RoleResourcesSearchForm extends Form
 
 
 
-        $role_id = new Element\Text('role_id');
-        $role_id->setLabel('Role Id')
+        $role_id = new Element\Select('role_id');
+        $role_id->setLabel('Role')
                 ->setAttribute('class', 'required')
-                ->setAttribute('placeholder', 'Role Id');
+                ->setOptions(array())
+                ->setDisableInArrayValidator(true)
+                ->setAttribute('placeholder', 'Role');
 
 
-        $resource_id = new Element\Text('resource_id');
-        $resource_id->setLabel('Resource Id')
+        $resource_id = new Element\Select('resource_id');
+        $resource_id->setLabel('Resource')
                 ->setAttribute('class', 'required')
-                ->setAttribute('placeholder', 'Resource Id');
+                ->setOptions(array())
+                ->setDisableInArrayValidator(true)
+                ->setAttribute('placeholder', 'Resource');
 
 
 

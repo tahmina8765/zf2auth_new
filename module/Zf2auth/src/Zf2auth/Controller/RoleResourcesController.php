@@ -125,6 +125,20 @@ class RoleResourcesController extends Zf2authAppController
                 ->setItemCountPerPage($itemsPerPage)
                 ->setPageRange(7);
 
+
+        /**
+         * Set Roles List
+         */
+        $options = $this->getRolesTable()->dropdownRoles();
+        $searchform->get('role_id')->setOptions(array('value_options' => $options));
+
+        /**
+         * Set Resource List
+         */
+        $options = $this->getResourcesTable()->dropdownResources();
+        $searchform->get('resource_id')->setOptions(array('value_options' => $options));
+
+
         $searchform->setData($formdata);
         $this->vm->setVariables(array(
             'search_by'   => $search_by,
@@ -170,7 +184,7 @@ class RoleResourcesController extends Zf2authAppController
          * Set Resource List
          */
         $options = $this->getResourcesTable()->dropdownResources();
-        $form->get('role_id')->setOptions(array('value_options' => $options));
+        $form->get('resource_id')->setOptions(array('value_options' => $options));
 
         $this->vm->setVariables(array(
             'flashMessages' => $this->flashMessenger()->getMessages(),
@@ -207,6 +221,19 @@ class RoleResourcesController extends Zf2authAppController
                 return $this->redirect()->toRoute('role_resources');
             }
         }
+
+        /**
+         * Set Roles List
+         */
+        $options = $this->getRolesTable()->dropdownRoles();
+        $form->get('role_id')->setOptions(array('value_options' => $options));
+
+        /**
+         * Set Resource List
+         */
+        $options = $this->getResourcesTable()->dropdownResources();
+        $form->get('resource_id')->setOptions(array('value_options' => $options));
+
         $this->vm->setVariables(array(
             'flashMessages' => $this->flashMessenger()->getMessages(),
             'id'            => $id,

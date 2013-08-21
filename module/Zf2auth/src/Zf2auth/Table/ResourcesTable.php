@@ -78,6 +78,7 @@ class ResourcesTable extends AbstractTableGateway
         $resultSet->buffer();
 
         $options = array();
+        $options[''] = '--- Resources ---';
         if (count($resultSet) > 0) {
             foreach ($resultSet as $row)
                 $options[$row->getId()] = $row->getName();
