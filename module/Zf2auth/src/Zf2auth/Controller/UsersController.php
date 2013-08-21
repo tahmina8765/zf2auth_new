@@ -329,12 +329,7 @@ class UsersController extends Zf2authAppController
             }
 
             $currentUser['identity'] = $email;
-            $currentUser['rolename'] = 'Registered User';
             $this->getAuthService()->getStorage()->write($currentUser);
-
-            if (empty($currentUser['country_id'])) {
-                $redirect = 'profiles/regstep2';
-            }
 
         }
         return $this->redirect()->toRoute($redirect);

@@ -1,18 +1,19 @@
 <?php
-$title = 'Roles';
+$title     = 'Roles';
 $this->headTitle($title);
 $url_order = 'ASC';
-if ($order_by == 'name') { $url_order = ($order == 'ASC' )? 'DESC' : 'ASC';}
-
+if ($order_by == 'name') {
+    $url_order = ($order == 'ASC' ) ? 'DESC' : 'ASC';
+}
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p>
-    <a href="<?php echo $this->url('roles', array('action'=>'add'));?>">Add new roles</a>
+    <a href="<?php echo $this->url('roles', array('action' => 'add')); ?>">Add new roles</a>
 </p>
 
 <?php echo $this->partial('zf2auth/elements/message.phtml', array('flashMessages' => $this->flashMessages, 'error'         => $this->error)); ?>
 <?php
-$form  = $this->form;
+$form      = $this->form;
 $form->setAttribute('action', $this->url('roles', array('action' => 'search')));
 $form->prepare();
 
@@ -39,21 +40,21 @@ echo $this->form()->closeTag();
 
 <table class="table">
     <thead>
-    <tr>
-    <th><a href="<?php echo $this->url('roles', array('order_by' => 'name', 'order' => $url_order, 'search_by' => $search_by)); ?>">Name <?php if ($order_by == 'name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
-        </th>
-<th>Action</th>
-    </tr>
+        <tr>
+            <th><a href="<?php echo $this->url('roles', array('order_by'  => 'name', 'order'     => $url_order, 'search_by' => $search_by)); ?>">Name <?php if ($order_by == 'name'): ?><i class="icon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+            <th>Action</th>
+        </tr>
     </thead>
     <tbody>
-<?php foreach ($paginator as $row) : ?>
-        <tr>
-        <td><?php echo $this->escapeHtml($row->name);?></td>
-		
-    <td>
-        <a href="<?php echo $this->url('roles', array('action'=>'edit', 'id' => $row->id));?>" class="btn btn-primary btn-mini edit-row">Edit</a>
-            <?php
-                    $delurl = $this->url('roles', array (
+        <?php foreach ($paginator as $row) : ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($row->name); ?></td>
+
+                <td>
+                    <a href="<?php echo $this->url('roles', array('action' => 'edit', 'id'     => $row->id)); ?>" class="btn btn-primary btn-mini edit-row">Edit</a>
+                    <a href="<?php echo $this->url('role_resources', array('action' => 'allpermission', 'id'     => $row->id)); ?>" class="btn btn-primary btn-mini edit-row">All Permission</a>
+                    <?php
+                    $delurl = $this->url('roles', array(
                         'action' => 'delete',
                         'id'     => $row->id,
                     ));
@@ -63,19 +64,23 @@ echo $this->form()->closeTag();
                             <input type="hidden" name="id" value="<?php echo (int) $row->id; ?>" />
                         </form>
                     </div>
-                    <a onclick="if (confirm('Are you sure you want to delete <?php echo $row->id; ?>?')) {document.<?php echo "post_" . $row->id; ?>.submit();} event.returnValue = false; return false;" href="#" class="btn btn-primary btn-mini edit-row">Delete</a>
+                    <a onclick="if (confirm('Are you sure you want to delete <?php echo $row->id; ?>?')) {
+                                document.<?php echo "post_" . $row->id; ?>.submit();
+                            }
+                            event.returnValue = false;
+                            return false;" href="#" class="btn btn-primary btn-mini edit-row">Delete</a>
 
-    </td>
-    
-        </tr>
-<?php endforeach; ?>
+                </td>
+
+            </tr>
+        <?php endforeach; ?>
     </tbody>
 </table>
 
 
 <?php
-    echo $this->paginationControl(
-            $paginator, 'Sliding', 'paginator-slide', array('order_by' => $order_by, 'order' => $order, 'search_by' => $search_by, 'pageAction' => $pageAction)
-    );
-    ?>
+echo $this->paginationControl(
+        $paginator, 'Sliding', 'paginator-slide', array('order_by'   => $order_by, 'order'      => $order, 'search_by'  => $search_by, 'pageAction' => $pageAction)
+);
+?>
 

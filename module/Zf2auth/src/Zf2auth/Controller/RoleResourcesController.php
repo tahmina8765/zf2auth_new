@@ -34,25 +34,6 @@ class RoleResourcesController extends Zf2authAppController
 //    }
 
 
-    public function bindAction()
-    {
-        $routerConfig = $this->getRouterConfig();
-        $allNode      = array();
-        foreach ($routerConfig['routes'] as $node => $data) {
-            $allNode[] = $node;
-            if (!empty($data['child_routes'])) {
-                foreach ($data['child_routes'] as $childnode => $childdata) {
-                    $allNode[] = $node . '/' . $childnode;
-                }
-            }
-        }
-
-        $this->vm->setVariables(array(
-            'allNode' => $allNode,
-        ));
-        return $this->vm;
-    }
-
     public function searchAction()
     {
 
@@ -115,7 +96,7 @@ class RoleResourcesController extends Zf2authAppController
          */
         $select->join('roles', 'roles.id = role_resources.role_id', array('role_name' => 'name'), 'left');
         $select->join('resources', 'resources.id = role_resources.resource_id', array('resource_name' => 'name'), 'left');
-        
+
         if (!empty($where)) {
             $select->where($where);
         }
@@ -273,6 +254,53 @@ class RoleResourcesController extends Zf2authAppController
         ));
 
         return $this->vm;
+    }
+
+    /**
+     * Give all permission to a specific role
+     */
+    public function allpermissionAction()
+    {
+        $form = new RoleResourcesForm();
+        $id   = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('roles', array(
+                        'action' => 'index'
+            ));
+        }
+
+        $select = new Select();
+        $where  = new \Zend\Db\Sql\Where();
+
+        $where->addPredicate(
+                new \Zend\Db\Sql\Predicate\Expression("resources.id NOT IN (
+                    SELECT resource_id FROM role_resources WHERE role_id = {$id}
+
+                    )
+                    ")
+        );
+
+        if (!empty($where)) {
+            $select->where($where);
+        }
+
+        $resources = $this->getResourcesTable()->fetchAll($select);
+        if (count($resources) > 0) {
+            foreach ($resources as $resource) {
+                $role_resources = new RoleResources();
+                $form->setInputFilter($role_resources->getInputFilter());
+                $formdata       = array(
+                    'resource_id' => $resource->getId(),
+                    'role_id'     => $id,
+                );
+                $form->setData($formdata);
+
+                if ($form->isValid()) {
+                    $role_resources->exchangeArray($form->getData());
+                    $confirm = $this->getRoleResourcesTable()->saveRoleResources($role_resources);
+                }
+            }
+        }
     }
 
 }

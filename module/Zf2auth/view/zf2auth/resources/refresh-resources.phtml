@@ -12,19 +12,10 @@ $this->headTitle($title);
   <?php
   }
   }
-  ?>
-  <h1>Existing resources</h1>
-  <?php
-  if (!empty($resources)) {
-  foreach ($resources as $data) {
-  ?>
-  <a href="<?php //echo $this->url($data);  ?>"><?php echo $this->translate($data->getName()); ?></a><br>
-  <?php
-  }
-  }
  *
  */
 ?>
+
 <div class="row">
     <div class="span6">
         <h2>New added resource(s)</h2>
@@ -50,4 +41,16 @@ $this->headTitle($title);
         }
         ?>
     </div>
+</div>
+<h1>Existing resources</h1>
+<div class="row">
+<?php
+if (!empty($resources)) {
+    foreach ($resources as $data) {
+        ?>
+        <a href="<?php //echo $this->url($data);   ?>"><?php echo $this->translate($data->getName()); ?></a><br>
+        <?php
+    }
+}
+?>
 </div>

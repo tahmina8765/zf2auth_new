@@ -55,6 +55,7 @@ class RoleResourcesTable extends AbstractTableGateway
 
     public function saveRoleResources(RoleResources $formdata)
     {
+        $return = false;
         $data = array(
             'role_id'     => $formdata->role_id,
             'resource_id' => $formdata->resource_id,
@@ -62,14 +63,15 @@ class RoleResourcesTable extends AbstractTableGateway
 
         $id = (int) $formdata->id;
         if ($id == 0) {
-            $this->insert($data);
+            $return =$this->insert($data);
         } else {
             if ($this->getRoleResources($id)) {
-                $this->update($data, array('id' => $id));
+                $return = $this->update($data, array('id' => $id));
             } else {
                 throw new \Exception('Form id does not exist');
             }
         }
+        return $return;
     }
 
     public function deleteRoleResources($id)

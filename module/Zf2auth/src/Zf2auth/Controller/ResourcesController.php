@@ -271,6 +271,9 @@ class ResourcesController extends Zf2authAppController
                 }
             }
         }
+
+//      Read All link from Database (After Refresh)
+        $db_resources = $this->getResourcesTable()->fetchAll();
         $this->vm->setVariables(array(
             'resources'         => $db_resources,
             'allNode'           => $allNode,
@@ -279,5 +282,7 @@ class ResourcesController extends Zf2authAppController
         ));
         return $this->vm;
     }
+
+    
 
 }
