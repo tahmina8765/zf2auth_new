@@ -4,30 +4,24 @@ namespace Zf2auth\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
 use Zf2auth\Entity\Album;
 use Zf2auth\Form\AlbumForm;
 use Zf2auth\Form\AlbumSearchForm;
-
-
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\Iterator as paginatorIterator;
 
-
-
-
-
 class AlbumController extends Zf2authAppController
 {
+
     public $vm;
+
 //    protected $albumTable;
 
     function __construct()
     {
         parent::__construct();
         $this->vm = new viewModel();
-
     }
 
 //    public function getAlbumTable()
@@ -65,17 +59,18 @@ class AlbumController extends Zf2authAppController
         $this->redirect()->toUrl($url);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $searchform = new AlbumSearchForm();
         $searchform->get('submit')->setValue('Search');
 
         $select = new Select();
 
-        $order_by = $this->params()->fromRoute('order_by') ?
+        $order_by  = $this->params()->fromRoute('order_by') ?
                 $this->params()->fromRoute('order_by') : 'id';
-        $order = $this->params()->fromRoute('order') ?
+        $order     = $this->params()->fromRoute('order') ?
                 $this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
-        $page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+        $page      = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
         $select->order($order_by . ' ' . $order);
         $search_by = $this->params()->fromRoute('search_by') ?
                 $this->params()->fromRoute('search_by') : '';
@@ -95,14 +90,13 @@ class AlbumController extends Zf2authAppController
                         new \Zend\Db\Sql\Predicate\Like('title', '%' . $formdata['title'] . '%')
                 );
             }
-            
         }
         if (!empty($where)) {
             $select->where($where);
         }
 
 
-        $album = $this->getAlbumTable()->fetchAll($select);
+        $album        = $this->getAlbumTable()->fetchAll($select);
         $totalRecord  = $album->count();
         $itemsPerPage = 10;
 
@@ -114,21 +108,17 @@ class AlbumController extends Zf2authAppController
 
         $searchform->setData($formdata);
         $this->vm->setVariables(array(
-            'search_by'  => $search_by,
-            'order_by'   => $order_by,
-            'order'      => $order,
-            'page'       => $page,
-            'paginator'  => $paginator,
-            'pageAction' => 'album',
-            'form'       => $searchform,
+            'search_by'   => $search_by,
+            'order_by'    => $order_by,
+            'order'       => $order,
+            'page'        => $page,
+            'paginator'   => $paginator,
+            'pageAction'  => 'album',
+            'form'        => $searchform,
             'totalRecord' => $totalRecord
         ));
         return $this->vm;
-
-
-
     }
-
 
     public function addAction()
     {
@@ -150,8 +140,8 @@ class AlbumController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'form' => $form
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'form'          => $form
         ));
 
         return $this->vm;
@@ -164,7 +154,7 @@ class AlbumController extends Zf2authAppController
         if (!$id) {
             return $this->redirect()->toRoute('album', array(
                         'action' => 'add'
-                    ));
+            ));
         }
         $album = $this->getAlbumTable()->getAlbum($id);
 
@@ -185,9 +175,9 @@ class AlbumController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'   => $id,
-            'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'form'          => $form,
         ));
 
         return $this->vm;
@@ -203,17 +193,17 @@ class AlbumController extends Zf2authAppController
         $request = $this->getRequest();
         if ($request->isPost()) {
 
-                $id = (int) $request->getPost('id');
-                $confirm = $this->getAlbumTable()->deleteAlbum($id);
+            $id      = (int) $request->getPost('id');
+            $confirm = $this->getAlbumTable()->deleteAlbum($id);
 
 
             // Redirect to list of albums
             return $this->redirect()->toRoute('album');
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'    => $id,
-            'album' => $this->getAlbumTable()->getAlbum($id)
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'album'         => $this->getAlbumTable()->getAlbum($id)
         ));
 
         return $this->vm;

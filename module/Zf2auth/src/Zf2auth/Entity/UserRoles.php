@@ -11,18 +11,15 @@ class UserRoles implements InputFilterAwareInterface
 {
 
     public $user_id;
-	public $role_id;
-	
+    public $role_id;
     protected $inputFilter;                       // <-- Add this variable
 
     public function exchangeArray($data)
     {
-        $this->id     = (isset($data['id'])) ? $data['id'] : null;
-	$this->user_id     = (isset($data['user_id'])) ? $data['user_id'] : null;
-	$this->role_id     = (isset($data['role_id'])) ? $data['role_id'] : null;
-	
+        $this->id      = (isset($data['id'])) ? $data['id'] : null;
+        $this->user_id = (isset($data['user_id'])) ? $data['user_id'] : null;
+        $this->role_id = (isset($data['role_id'])) ? $data['role_id'] : null;
     }
-
 
     public function getArrayCopy()
     {
@@ -38,26 +35,26 @@ class UserRoles implements InputFilterAwareInterface
     {
         return $this->id;
     }
+
     public function setUserId($user_id)
-            {
-                $this->user_id = $user_id;
-            }
+    {
+        $this->user_id = $user_id;
+    }
 
-            public function getUserId()
-            {
-                return $this->user_id;
-            }
-            public function setRoleId($role_id)
-            {
-                $this->role_id = $role_id;
-            }
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
 
-            public function getRoleId()
-            {
-                return $this->role_id;
-            }
-            
+    public function setRoleId($role_id)
+    {
+        $this->role_id = $role_id;
+    }
 
+    public function getRoleId()
+    {
+        return $this->role_id;
+    }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
@@ -78,17 +75,17 @@ class UserRoles implements InputFilterAwareInterface
                         ),
             )));
 
-            
+
             $inputFilter->add($factory->createInput(array(
                         'name'     => 'user_id',
                         'required' => true,
             )));
-            
+
             $inputFilter->add($factory->createInput(array(
                         'name'     => 'role_id',
                         'required' => true,
             )));
-            
+
 
             $this->inputFilter = $inputFilter;
         }

@@ -1,8 +1,8 @@
 <?php
+
 namespace Zf2auth\Table;
 
 use Zend\Db\TableGateway\TableGateway;
-
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
@@ -11,30 +11,33 @@ use Zf2auth\Entity\Fbprofiles;
 
 class FbprofilesTable extends AbstractTableGateway
 {
+
     protected $table = 'fbprofiles';
 
-    public function __construct(Adapter $adapter) {
-        $this->adapter = $adapter;
+    public function __construct(Adapter $adapter)
+    {
+        $this->adapter            = $adapter;
         $this->resultSetPrototype = new ResultSet();
         $this->resultSetPrototype->setArrayObjectPrototype(new Fbprofiles());
 
         $this->initialize();
     }
 
-    public function fetchAll(Select $select = null) {
+    public function fetchAll(Select $select = null)
+    {
         if (null === $select)
-            $select = new Select();
+            $select    = new Select();
         $select->from($this->table);
         $resultSet = $this->selectWith($select);
         $resultSet->buffer();
         return $resultSet;
     }
 
-
-    public function getFbprofiles($id) {
-        $id = (int) $id;
+    public function getFbprofiles($id)
+    {
+        $id     = (int) $id;
         $rowset = $this->select(array('id' => $id));
-        $row = $rowset->current();
+        $row    = $rowset->current();
         if (!$row) {
             throw new \Exception("Could not find row $id");
         }
@@ -44,23 +47,22 @@ class FbprofilesTable extends AbstractTableGateway
     public function saveFbprofiles(Fbprofiles $formdata)
     {
         $data = array(
-            'user_id' => $formdata->user_id,
-		'facebook_id' => $formdata->facebook_id,
-		'name' => $formdata->name,
-		'first_name' => $formdata->first_name,
-		'last_name' => $formdata->last_name,
-		'link' => $formdata->link,
-		'username' => $formdata->username,
-		'email' => $formdata->email,
-		'gender' => $formdata->gender,
-		'timezone' => $formdata->timezone,
-		'locale' => $formdata->locale,
-		'verified' => $formdata->verified,
-		'updated_time' => $formdata->updated_time,
-		
+            'user_id'      => $formdata->user_id,
+            'facebook_id'  => $formdata->facebook_id,
+            'name'         => $formdata->name,
+            'first_name'   => $formdata->first_name,
+            'last_name'    => $formdata->last_name,
+            'link'         => $formdata->link,
+            'username'     => $formdata->username,
+            'email'        => $formdata->email,
+            'gender'       => $formdata->gender,
+            'timezone'     => $formdata->timezone,
+            'locale'       => $formdata->locale,
+            'verified'     => $formdata->verified,
+            'updated_time' => $formdata->updated_time,
         );
 
-        $id = (int)$formdata->id;
+        $id = (int) $formdata->id;
         if ($id == 0) {
             $this->insert($data);
         } else {
@@ -76,5 +78,6 @@ class FbprofilesTable extends AbstractTableGateway
     {
         $this->delete(array('id' => $id));
     }
+
 }
-            
+

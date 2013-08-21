@@ -4,30 +4,24 @@ namespace Zf2auth\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
 use Zf2auth\Entity\Fbprofiles;
 use Zf2auth\Form\FbprofilesForm;
 use Zf2auth\Form\FbprofilesSearchForm;
-
-
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\Iterator as paginatorIterator;
 
-
-
-
-
 class FbprofilesController extends Zf2authAppController
 {
+
     public $vm;
+
 //    protected $fbprofilesTable;
 
     function __construct()
     {
         parent::__construct();
         $this->vm = new viewModel();
-
     }
 
 //    public function getFbprofilesTable()
@@ -65,17 +59,18 @@ class FbprofilesController extends Zf2authAppController
         $this->redirect()->toUrl($url);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $searchform = new FbprofilesSearchForm();
         $searchform->get('submit')->setValue('Search');
 
         $select = new Select();
 
-        $order_by = $this->params()->fromRoute('order_by') ?
+        $order_by  = $this->params()->fromRoute('order_by') ?
                 $this->params()->fromRoute('order_by') : 'id';
-        $order = $this->params()->fromRoute('order') ?
+        $order     = $this->params()->fromRoute('order') ?
                 $this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
-        $page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+        $page      = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
         $select->order($order_by . ' ' . $order);
         $search_by = $this->params()->fromRoute('search_by') ?
                 $this->params()->fromRoute('search_by') : '';
@@ -150,14 +145,13 @@ class FbprofilesController extends Zf2authAppController
                         new \Zend\Db\Sql\Predicate\Like('updated_time', '%' . $formdata['updated_time'] . '%')
                 );
             }
-            
         }
         if (!empty($where)) {
             $select->where($where);
         }
 
 
-        $fbprofiles = $this->getFbprofilesTable()->fetchAll($select);
+        $fbprofiles   = $this->getFbprofilesTable()->fetchAll($select);
         $totalRecord  = $fbprofiles->count();
         $itemsPerPage = 10;
 
@@ -169,21 +163,17 @@ class FbprofilesController extends Zf2authAppController
 
         $searchform->setData($formdata);
         $this->vm->setVariables(array(
-            'search_by'  => $search_by,
-            'order_by'   => $order_by,
-            'order'      => $order,
-            'page'       => $page,
-            'paginator'  => $paginator,
-            'pageAction' => 'fbprofiles',
-            'form'       => $searchform,
+            'search_by'   => $search_by,
+            'order_by'    => $order_by,
+            'order'       => $order,
+            'page'        => $page,
+            'paginator'   => $paginator,
+            'pageAction'  => 'fbprofiles',
+            'form'        => $searchform,
             'totalRecord' => $totalRecord
         ));
         return $this->vm;
-
-
-
     }
-
 
     public function addAction()
     {
@@ -205,8 +195,8 @@ class FbprofilesController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'form' => $form
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'form'          => $form
         ));
 
         return $this->vm;
@@ -219,7 +209,7 @@ class FbprofilesController extends Zf2authAppController
         if (!$id) {
             return $this->redirect()->toRoute('fbprofiles', array(
                         'action' => 'add'
-                    ));
+            ));
         }
         $fbprofiles = $this->getFbprofilesTable()->getFbprofiles($id);
 
@@ -240,9 +230,9 @@ class FbprofilesController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'   => $id,
-            'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'form'          => $form,
         ));
 
         return $this->vm;
@@ -258,17 +248,17 @@ class FbprofilesController extends Zf2authAppController
         $request = $this->getRequest();
         if ($request->isPost()) {
 
-                $id = (int) $request->getPost('id');
-                $confirm = $this->getFbprofilesTable()->deleteFbprofiles($id);
+            $id      = (int) $request->getPost('id');
+            $confirm = $this->getFbprofilesTable()->deleteFbprofiles($id);
 
 
             // Redirect to list of fbprofiless
             return $this->redirect()->toRoute('fbprofiles');
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'    => $id,
-            'fbprofiles' => $this->getFbprofilesTable()->getFbprofiles($id)
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'fbprofiles'    => $this->getFbprofilesTable()->getFbprofiles($id)
         ));
 
         return $this->vm;

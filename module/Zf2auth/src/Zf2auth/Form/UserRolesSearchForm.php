@@ -1,4 +1,5 @@
 <?php
+
 namespace Zf2auth\Form;
 
 use Zend\Form\Form;
@@ -6,6 +7,7 @@ use \Zend\Form\Element;
 
 class UserRolesSearchForm extends Form
 {
+
     public function __construct($name = null)
     {
         parent::__construct('user_roles');
@@ -13,18 +15,18 @@ class UserRolesSearchForm extends Form
         $this->setAttribute('method', 'post');
 
 
-	
+
         $user_id = new Element\Text('user_id');
         $user_id->setLabel('User Id')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'User Id');
-        
+
 
         $role_id = new Element\Text('role_id');
         $role_id->setLabel('Role Id')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Role Id');
-        
+
 
 
 
@@ -34,12 +36,10 @@ class UserRolesSearchForm extends Form
 
 
         $this->add($user_id);
-	$this->add($role_id);
-	
-        $this->add($submit);
+        $this->add($role_id);
 
+        $this->add($submit);
     }
+
 }
 
-
-    

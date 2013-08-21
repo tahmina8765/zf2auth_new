@@ -1,4 +1,5 @@
 <?php
+
 namespace Zf2auth\Form;
 
 use Zend\Form\Form;
@@ -6,6 +7,7 @@ use \Zend\Form\Element;
 
 class ResourcesSearchForm extends Form
 {
+
     public function __construct($name = null)
     {
         parent::__construct('resources');
@@ -13,12 +15,12 @@ class ResourcesSearchForm extends Form
         $this->setAttribute('method', 'post');
 
 
-	
+
         $name = new Element\Text('name');
         $name->setLabel('Name')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Name');
-        
+
 
 
 
@@ -28,11 +30,9 @@ class ResourcesSearchForm extends Form
 
 
         $this->add($name);
-	
-        $this->add($submit);
 
+        $this->add($submit);
     }
+
 }
 
-
-    

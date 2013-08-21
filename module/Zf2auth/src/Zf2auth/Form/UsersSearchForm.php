@@ -1,4 +1,5 @@
 <?php
+
 namespace Zf2auth\Form;
 
 use Zend\Form\Form;
@@ -6,6 +7,7 @@ use \Zend\Form\Element;
 
 class UsersSearchForm extends Form
 {
+
     public function __construct($name = null)
     {
         parent::__construct('users');
@@ -13,48 +15,48 @@ class UsersSearchForm extends Form
         $this->setAttribute('method', 'post');
 
 
-	
+
         $username = new Element\Text('username');
         $username->setLabel('Username')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Username');
-        
+
 
         $email = new Element\Text('email');
         $email->setLabel('Email')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Email');
-        
+
 
         $password = new Element\Text('password');
         $password->setLabel('Password')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Password');
-        
+
 
         $email_check_code = new Element\Text('email_check_code');
         $email_check_code->setLabel('Email Check Code')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Email Check Code');
-        
+
 
         $is_disabled = new Element\Text('is_disabled');
         $is_disabled->setLabel('Is Disabled')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Is Disabled');
-        
+
 
         $created = new Element\Text('created');
         $created->setLabel('Created')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Created');
-        
+
 
         $modified = new Element\Text('modified');
         $modified->setLabel('Modified')
                 ->setAttribute('class', 'required')
                 ->setAttribute('placeholder', 'Modified');
-        
+
 
 
 
@@ -64,17 +66,15 @@ class UsersSearchForm extends Form
 
 
         $this->add($username);
-	$this->add($email);
-	$this->add($password);
-	$this->add($email_check_code);
-	$this->add($is_disabled);
-	$this->add($created);
-	$this->add($modified);
-	
-        $this->add($submit);
+        $this->add($email);
+        $this->add($password);
+        $this->add($email_check_code);
+        $this->add($is_disabled);
+        $this->add($created);
+        $this->add($modified);
 
+        $this->add($submit);
     }
+
 }
 
-
-    

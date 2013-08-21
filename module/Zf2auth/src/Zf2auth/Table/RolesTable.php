@@ -1,8 +1,8 @@
 <?php
+
 namespace Zf2auth\Table;
 
 use Zend\Db\TableGateway\TableGateway;
-
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
@@ -11,30 +11,33 @@ use Zf2auth\Entity\Roles;
 
 class RolesTable extends AbstractTableGateway
 {
+
     protected $table = 'roles';
 
-    public function __construct(Adapter $adapter) {
-        $this->adapter = $adapter;
+    public function __construct(Adapter $adapter)
+    {
+        $this->adapter            = $adapter;
         $this->resultSetPrototype = new ResultSet();
         $this->resultSetPrototype->setArrayObjectPrototype(new Roles());
 
         $this->initialize();
     }
 
-    public function fetchAll(Select $select = null) {
+    public function fetchAll(Select $select = null)
+    {
         if (null === $select)
-            $select = new Select();
+            $select    = new Select();
         $select->from($this->table);
         $resultSet = $this->selectWith($select);
         $resultSet->buffer();
         return $resultSet;
     }
 
-
-    public function getRoles($id) {
-        $id = (int) $id;
+    public function getRoles($id)
+    {
+        $id     = (int) $id;
         $rowset = $this->select(array('id' => $id));
-        $row = $rowset->current();
+        $row    = $rowset->current();
         if (!$row) {
             throw new \Exception("Could not find row $id");
         }
@@ -45,10 +48,9 @@ class RolesTable extends AbstractTableGateway
     {
         $data = array(
             'name' => $formdata->name,
-		
         );
 
-        $id = (int)$formdata->id;
+        $id = (int) $formdata->id;
         if ($id == 0) {
             $this->insert($data);
         } else {
@@ -64,5 +66,22 @@ class RolesTable extends AbstractTableGateway
     {
         $this->delete(array('id' => $id));
     }
+
+    public function dropdownRoles(Select $select = null)
+    {
+        if (null === $select)
+            $select    = new Select();
+        $select->from($this->table);
+        $resultSet = $this->selectWith($select);
+        $resultSet->buffer();
+
+        $options = array();
+        if (count($resultSet) > 0) {
+            foreach ($resultSet as $row)
+                $options[$row->getId()] = $row->getName();
+        }
+        return $options;
+    }
+
 }
-            
+

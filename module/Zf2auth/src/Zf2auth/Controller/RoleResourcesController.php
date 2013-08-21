@@ -16,7 +16,6 @@ class RoleResourcesController extends Zf2authAppController
 
     public $vm;
 
-
 //    protected $role_resourcesTable;
 
     function __construct()
@@ -38,7 +37,7 @@ class RoleResourcesController extends Zf2authAppController
     public function bindAction()
     {
         $routerConfig = $this->getRouterConfig();
-        $allNode    = array();
+        $allNode      = array();
         foreach ($routerConfig['routes'] as $node => $data) {
             $allNode[] = $node;
             if (!empty($data['child_routes'])) {
@@ -49,10 +48,9 @@ class RoleResourcesController extends Zf2authAppController
         }
 
         $this->vm->setVariables(array(
-            'allNode'   => $allNode,
+            'allNode' => $allNode,
         ));
         return $this->vm;
-
     }
 
     public function searchAction()
@@ -160,6 +158,20 @@ class RoleResourcesController extends Zf2authAppController
                 return $this->redirect()->toRoute('role_resources');
             }
         }
+
+
+        /**
+         * Set Roles List
+         */
+        $options = $this->getRolesTable()->dropdownRoles();
+        $form->get('role_id')->setOptions(array('value_options' => $options));
+
+        /**
+         * Set Resource List
+         */
+        $options = $this->getResourcesTable()->dropdownResources();
+        $form->get('role_id')->setOptions(array('value_options' => $options));
+
         $this->vm->setVariables(array(
             'flashMessages' => $this->flashMessenger()->getMessages(),
             'form'          => $form

@@ -11,18 +11,15 @@ class RoleResources implements InputFilterAwareInterface
 {
 
     public $role_id;
-	public $resource_id;
-	
+    public $resource_id;
     protected $inputFilter;                       // <-- Add this variable
 
     public function exchangeArray($data)
     {
-        $this->id     = (isset($data['id'])) ? $data['id'] : null;
-	$this->role_id     = (isset($data['role_id'])) ? $data['role_id'] : null;
-	$this->resource_id     = (isset($data['resource_id'])) ? $data['resource_id'] : null;
-	
+        $this->id          = (isset($data['id'])) ? $data['id'] : null;
+        $this->role_id     = (isset($data['role_id'])) ? $data['role_id'] : null;
+        $this->resource_id = (isset($data['resource_id'])) ? $data['resource_id'] : null;
     }
-
 
     public function getArrayCopy()
     {
@@ -38,26 +35,26 @@ class RoleResources implements InputFilterAwareInterface
     {
         return $this->id;
     }
+
     public function setRoleId($role_id)
-            {
-                $this->role_id = $role_id;
-            }
+    {
+        $this->role_id = $role_id;
+    }
 
-            public function getRoleId()
-            {
-                return $this->role_id;
-            }
-            public function setResourceId($resource_id)
-            {
-                $this->resource_id = $resource_id;
-            }
+    public function getRoleId()
+    {
+        return $this->role_id;
+    }
 
-            public function getResourceId()
-            {
-                return $this->resource_id;
-            }
-            
+    public function setResourceId($resource_id)
+    {
+        $this->resource_id = $resource_id;
+    }
 
+    public function getResourceId()
+    {
+        return $this->resource_id;
+    }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
@@ -78,17 +75,17 @@ class RoleResources implements InputFilterAwareInterface
                         ),
             )));
 
-            
+
             $inputFilter->add($factory->createInput(array(
                         'name'     => 'role_id',
                         'required' => true,
             )));
-            
+
             $inputFilter->add($factory->createInput(array(
                         'name'     => 'resource_id',
                         'required' => true,
             )));
-            
+
 
             $this->inputFilter = $inputFilter;
         }

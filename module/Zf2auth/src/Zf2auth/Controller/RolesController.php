@@ -4,30 +4,24 @@ namespace Zf2auth\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
 use Zf2auth\Entity\Roles;
 use Zf2auth\Form\RolesForm;
 use Zf2auth\Form\RolesSearchForm;
-
-
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\Iterator as paginatorIterator;
 
-
-
-
-
 class RolesController extends Zf2authAppController
 {
+
     public $vm;
+
 //    protected $rolesTable;
 
     function __construct()
     {
         parent::__construct();
         $this->vm = new viewModel();
-
     }
 
 //    public function getRolesTable()
@@ -65,17 +59,18 @@ class RolesController extends Zf2authAppController
         $this->redirect()->toUrl($url);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $searchform = new RolesSearchForm();
         $searchform->get('submit')->setValue('Search');
 
         $select = new Select();
 
-        $order_by = $this->params()->fromRoute('order_by') ?
+        $order_by  = $this->params()->fromRoute('order_by') ?
                 $this->params()->fromRoute('order_by') : 'id';
-        $order = $this->params()->fromRoute('order') ?
+        $order     = $this->params()->fromRoute('order') ?
                 $this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
-        $page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+        $page      = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
         $select->order($order_by . ' ' . $order);
         $search_by = $this->params()->fromRoute('search_by') ?
                 $this->params()->fromRoute('search_by') : '';
@@ -90,14 +85,13 @@ class RolesController extends Zf2authAppController
                         new \Zend\Db\Sql\Predicate\Like('name', '%' . $formdata['name'] . '%')
                 );
             }
-            
         }
         if (!empty($where)) {
             $select->where($where);
         }
 
 
-        $roles = $this->getRolesTable()->fetchAll($select);
+        $roles        = $this->getRolesTable()->fetchAll($select);
         $totalRecord  = $roles->count();
         $itemsPerPage = 10;
 
@@ -109,21 +103,17 @@ class RolesController extends Zf2authAppController
 
         $searchform->setData($formdata);
         $this->vm->setVariables(array(
-            'search_by'  => $search_by,
-            'order_by'   => $order_by,
-            'order'      => $order,
-            'page'       => $page,
-            'paginator'  => $paginator,
-            'pageAction' => 'roles',
-            'form'       => $searchform,
+            'search_by'   => $search_by,
+            'order_by'    => $order_by,
+            'order'       => $order,
+            'page'        => $page,
+            'paginator'   => $paginator,
+            'pageAction'  => 'roles',
+            'form'        => $searchform,
             'totalRecord' => $totalRecord
         ));
         return $this->vm;
-
-
-
     }
-
 
     public function addAction()
     {
@@ -145,8 +135,8 @@ class RolesController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'form' => $form
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'form'          => $form
         ));
 
         return $this->vm;
@@ -159,7 +149,7 @@ class RolesController extends Zf2authAppController
         if (!$id) {
             return $this->redirect()->toRoute('roles', array(
                         'action' => 'add'
-                    ));
+            ));
         }
         $roles = $this->getRolesTable()->getRoles($id);
 
@@ -180,9 +170,9 @@ class RolesController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'   => $id,
-            'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'form'          => $form,
         ));
 
         return $this->vm;
@@ -198,17 +188,17 @@ class RolesController extends Zf2authAppController
         $request = $this->getRequest();
         if ($request->isPost()) {
 
-                $id = (int) $request->getPost('id');
-                $confirm = $this->getRolesTable()->deleteRoles($id);
+            $id      = (int) $request->getPost('id');
+            $confirm = $this->getRolesTable()->deleteRoles($id);
 
 
             // Redirect to list of roless
             return $this->redirect()->toRoute('roles');
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'    => $id,
-            'roles' => $this->getRolesTable()->getRoles($id)
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'roles'         => $this->getRolesTable()->getRoles($id)
         ));
 
         return $this->vm;

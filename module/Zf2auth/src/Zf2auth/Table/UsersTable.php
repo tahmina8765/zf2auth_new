@@ -1,8 +1,8 @@
 <?php
+
 namespace Zf2auth\Table;
 
 use Zend\Db\TableGateway\TableGateway;
-
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
@@ -11,30 +11,33 @@ use Zf2auth\Entity\Users;
 
 class UsersTable extends AbstractTableGateway
 {
+
     protected $table = 'users';
 
-    public function __construct(Adapter $adapter) {
-        $this->adapter = $adapter;
+    public function __construct(Adapter $adapter)
+    {
+        $this->adapter            = $adapter;
         $this->resultSetPrototype = new ResultSet();
         $this->resultSetPrototype->setArrayObjectPrototype(new Users());
 
         $this->initialize();
     }
 
-    public function fetchAll(Select $select = null) {
+    public function fetchAll(Select $select = null)
+    {
         if (null === $select)
-            $select = new Select();
+            $select    = new Select();
         $select->from($this->table);
         $resultSet = $this->selectWith($select);
         $resultSet->buffer();
         return $resultSet;
     }
 
-
-    public function getUsers($id) {
-        $id = (int) $id;
+    public function getUsers($id)
+    {
+        $id     = (int) $id;
         $rowset = $this->select(array('id' => $id));
-        $row = $rowset->current();
+        $row    = $rowset->current();
         if (!$row) {
             throw new \Exception("Could not find row $id");
         }
@@ -44,17 +47,16 @@ class UsersTable extends AbstractTableGateway
     public function saveUsers(Users $formdata)
     {
         $data = array(
-            'username' => $formdata->username,
-		'email' => $formdata->email,
-		'password' => $formdata->password,
-		'email_check_code' => $formdata->email_check_code,
-		'is_disabled' => $formdata->is_disabled,
-		'created' => $formdata->created,
-		'modified' => $formdata->modified,
-		
+            'username'         => $formdata->username,
+            'email'            => $formdata->email,
+            'password'         => $formdata->password,
+            'email_check_code' => $formdata->email_check_code,
+            'is_disabled'      => $formdata->is_disabled,
+            'created'          => $formdata->created,
+            'modified'         => $formdata->modified,
         );
 
-        $id = (int)$formdata->id;
+        $id = (int) $formdata->id;
         if ($id == 0) {
             $this->insert($data);
         } else {
@@ -70,5 +72,6 @@ class UsersTable extends AbstractTableGateway
     {
         $this->delete(array('id' => $id));
     }
+
 }
-            
+

@@ -4,30 +4,24 @@ namespace Zf2auth\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
 use Zf2auth\Entity\Profiles;
 use Zf2auth\Form\ProfilesForm;
 use Zf2auth\Form\ProfilesSearchForm;
-
-
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\Iterator as paginatorIterator;
 
-
-
-
-
 class ProfilesController extends Zf2authAppController
 {
+
     public $vm;
+
 //    protected $profilesTable;
 
     function __construct()
     {
         parent::__construct();
         $this->vm = new viewModel();
-
     }
 
 //    public function getProfilesTable()
@@ -65,17 +59,18 @@ class ProfilesController extends Zf2authAppController
         $this->redirect()->toUrl($url);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $searchform = new ProfilesSearchForm();
         $searchform->get('submit')->setValue('Search');
 
         $select = new Select();
 
-        $order_by = $this->params()->fromRoute('order_by') ?
+        $order_by  = $this->params()->fromRoute('order_by') ?
                 $this->params()->fromRoute('order_by') : 'id';
-        $order = $this->params()->fromRoute('order') ?
+        $order     = $this->params()->fromRoute('order') ?
                 $this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
-        $page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+        $page      = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
         $select->order($order_by . ' ' . $order);
         $search_by = $this->params()->fromRoute('search_by') ?
                 $this->params()->fromRoute('search_by') : '';
@@ -110,14 +105,13 @@ class ProfilesController extends Zf2authAppController
                         new \Zend\Db\Sql\Predicate\Like('modified', '%' . $formdata['modified'] . '%')
                 );
             }
-            
         }
         if (!empty($where)) {
             $select->where($where);
         }
 
 
-        $profiles = $this->getProfilesTable()->fetchAll($select);
+        $profiles     = $this->getProfilesTable()->fetchAll($select);
         $totalRecord  = $profiles->count();
         $itemsPerPage = 10;
 
@@ -129,21 +123,17 @@ class ProfilesController extends Zf2authAppController
 
         $searchform->setData($formdata);
         $this->vm->setVariables(array(
-            'search_by'  => $search_by,
-            'order_by'   => $order_by,
-            'order'      => $order,
-            'page'       => $page,
-            'paginator'  => $paginator,
-            'pageAction' => 'profiles',
-            'form'       => $searchform,
+            'search_by'   => $search_by,
+            'order_by'    => $order_by,
+            'order'       => $order,
+            'page'        => $page,
+            'paginator'   => $paginator,
+            'pageAction'  => 'profiles',
+            'form'        => $searchform,
             'totalRecord' => $totalRecord
         ));
         return $this->vm;
-
-
-
     }
-
 
     public function addAction()
     {
@@ -165,8 +155,8 @@ class ProfilesController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'form' => $form
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'form'          => $form
         ));
 
         return $this->vm;
@@ -179,7 +169,7 @@ class ProfilesController extends Zf2authAppController
         if (!$id) {
             return $this->redirect()->toRoute('profiles', array(
                         'action' => 'add'
-                    ));
+            ));
         }
         $profiles = $this->getProfilesTable()->getProfiles($id);
 
@@ -200,9 +190,9 @@ class ProfilesController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'   => $id,
-            'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'form'          => $form,
         ));
 
         return $this->vm;
@@ -218,17 +208,17 @@ class ProfilesController extends Zf2authAppController
         $request = $this->getRequest();
         if ($request->isPost()) {
 
-                $id = (int) $request->getPost('id');
-                $confirm = $this->getProfilesTable()->deleteProfiles($id);
+            $id      = (int) $request->getPost('id');
+            $confirm = $this->getProfilesTable()->deleteProfiles($id);
 
 
             // Redirect to list of profiless
             return $this->redirect()->toRoute('profiles');
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'    => $id,
-            'profiles' => $this->getProfilesTable()->getProfiles($id)
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'profiles'      => $this->getProfilesTable()->getProfiles($id)
         ));
 
         return $this->vm;

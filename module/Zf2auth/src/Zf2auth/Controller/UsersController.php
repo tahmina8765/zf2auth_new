@@ -4,30 +4,24 @@ namespace Zf2auth\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
 use Zf2auth\Entity\Users;
 use Zf2auth\Form\UsersForm;
 use Zf2auth\Form\UsersSearchForm;
-
-
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\Iterator as paginatorIterator;
 
-
-
-
-
 class UsersController extends Zf2authAppController
 {
+
     public $vm;
+
 //    protected $usersTable;
 
     function __construct()
     {
         parent::__construct();
         $this->vm = new viewModel();
-
     }
 
 //    public function getUsersTable()
@@ -65,17 +59,18 @@ class UsersController extends Zf2authAppController
         $this->redirect()->toUrl($url);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $searchform = new UsersSearchForm();
         $searchform->get('submit')->setValue('Search');
 
         $select = new Select();
 
-        $order_by = $this->params()->fromRoute('order_by') ?
+        $order_by  = $this->params()->fromRoute('order_by') ?
                 $this->params()->fromRoute('order_by') : 'id';
-        $order = $this->params()->fromRoute('order') ?
+        $order     = $this->params()->fromRoute('order') ?
                 $this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
-        $page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+        $page      = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
         $select->order($order_by . ' ' . $order);
         $search_by = $this->params()->fromRoute('search_by') ?
                 $this->params()->fromRoute('search_by') : '';
@@ -120,14 +115,13 @@ class UsersController extends Zf2authAppController
                         new \Zend\Db\Sql\Predicate\Like('modified', '%' . $formdata['modified'] . '%')
                 );
             }
-            
         }
         if (!empty($where)) {
             $select->where($where);
         }
 
 
-        $users = $this->getUsersTable()->fetchAll($select);
+        $users        = $this->getUsersTable()->fetchAll($select);
         $totalRecord  = $users->count();
         $itemsPerPage = 10;
 
@@ -139,21 +133,17 @@ class UsersController extends Zf2authAppController
 
         $searchform->setData($formdata);
         $this->vm->setVariables(array(
-            'search_by'  => $search_by,
-            'order_by'   => $order_by,
-            'order'      => $order,
-            'page'       => $page,
-            'paginator'  => $paginator,
-            'pageAction' => 'users',
-            'form'       => $searchform,
+            'search_by'   => $search_by,
+            'order_by'    => $order_by,
+            'order'       => $order,
+            'page'        => $page,
+            'paginator'   => $paginator,
+            'pageAction'  => 'users',
+            'form'        => $searchform,
             'totalRecord' => $totalRecord
         ));
         return $this->vm;
-
-
-
     }
-
 
     public function addAction()
     {
@@ -175,8 +165,8 @@ class UsersController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'form' => $form
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'form'          => $form
         ));
 
         return $this->vm;
@@ -189,7 +179,7 @@ class UsersController extends Zf2authAppController
         if (!$id) {
             return $this->redirect()->toRoute('users', array(
                         'action' => 'add'
-                    ));
+            ));
         }
         $users = $this->getUsersTable()->getUsers($id);
 
@@ -210,9 +200,9 @@ class UsersController extends Zf2authAppController
             }
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'   => $id,
-            'form' => $form,
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'form'          => $form,
         ));
 
         return $this->vm;
@@ -228,17 +218,17 @@ class UsersController extends Zf2authAppController
         $request = $this->getRequest();
         if ($request->isPost()) {
 
-                $id = (int) $request->getPost('id');
-                $confirm = $this->getUsersTable()->deleteUsers($id);
+            $id      = (int) $request->getPost('id');
+            $confirm = $this->getUsersTable()->deleteUsers($id);
 
 
             // Redirect to list of userss
             return $this->redirect()->toRoute('users');
         }
         $this->vm->setVariables(array(
-            'flashMessages'   => $this->flashMessenger()->getMessages(),
-            'id'    => $id,
-            'users' => $this->getUsersTable()->getUsers($id)
+            'flashMessages' => $this->flashMessenger()->getMessages(),
+            'id'            => $id,
+            'users'         => $this->getUsersTable()->getUsers($id)
         ));
 
         return $this->vm;
