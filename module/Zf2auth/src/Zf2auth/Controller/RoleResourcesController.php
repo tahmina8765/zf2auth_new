@@ -110,6 +110,12 @@ class RoleResourcesController extends Zf2authAppController
                 );
             }
         }
+        /**
+         * Join Tables
+         */
+        $select->join('roles', 'roles.id = role_resources.role_id', array('role_name' => 'name'), 'left');
+        $select->join('resources', 'resources.id = role_resources.resource_id', array('resource_name' => 'name'), 'left');
+        
         if (!empty($where)) {
             $select->where($where);
         }
