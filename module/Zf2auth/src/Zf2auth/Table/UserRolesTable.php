@@ -6,6 +6,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use Zf2auth\Entity\UserRoles;
 
@@ -25,10 +26,18 @@ class UserRolesTable extends AbstractTableGateway
 
     public function fetchAll(Select $select = null)
     {
+        $adapter = $this->adapter;
         if (null === $select)
-            $select    = new Select();
+            $select  = new Select();
         $select->from($this->table);
-        $resultSet = $this->selectWith($select);
+
+//        echo "<pre>";
+//        echo $select->getSqlString();
+//        die();
+
+        $sql       = new Sql($adapter);
+        $statement = $sql->getSqlStringForSqlObject($select);
+        $resultSet = $adapter->query($statement, $adapter::QUERY_MODE_EXECUTE);
         $resultSet->buffer();
         return $resultSet;
     }

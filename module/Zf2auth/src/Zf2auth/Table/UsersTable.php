@@ -73,5 +73,22 @@ class UsersTable extends AbstractTableGateway
         $this->delete(array('id' => $id));
     }
 
+    public function dropdownUsers(Select $select = null)
+    {
+        if (null === $select)
+            $select    = new Select();
+        $select->from($this->table);
+        $resultSet = $this->selectWith($select);
+        $resultSet->buffer();
+
+        $options = array();
+        $options[''] = '--- Users ---';
+        if (count($resultSet) > 0) {
+            foreach ($resultSet as $row)
+                $options[$row->getId()] = $row->getUsername();
+        }
+        return $options;
+    }
+
 }
 

@@ -18,17 +18,20 @@ class UserRolesForm extends Form
         $id = new Element\Hidden('id');
         $id->setAttribute('class', 'primarykey');
 
-
-        $user_id = new Element\Text('user_id');
-        $user_id->setLabel('User Id')
+        $user_id = new Element\Select('user_id');
+        $user_id->setLabel('User')
                 ->setAttribute('class', 'required')
-                ->setAttribute('placeholder', 'User Id');
+                ->setOptions(array())
+                ->setDisableInArrayValidator(true)
+                ->setAttribute('placeholder', 'User');
 
 
-        $role_id = new Element\Text('role_id');
-        $role_id->setLabel('Role Id')
+        $role_id = new Element\Select('role_id');
+        $role_id->setLabel('Role')
                 ->setAttribute('class', 'required')
-                ->setAttribute('placeholder', 'Role Id');
+                ->setOptions(array())
+                ->setDisableInArrayValidator(true)
+                ->setAttribute('placeholder', 'Role');
 
 
 

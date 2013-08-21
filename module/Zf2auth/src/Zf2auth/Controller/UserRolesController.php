@@ -95,6 +95,12 @@ class UserRolesController extends Zf2authAppController
             $select->where($where);
         }
 
+        /**
+         * Join Tables
+         */
+        $select->join('roles', 'roles.id = user_roles.role_id', array('role_name' => 'name'), 'left');
+        $select->join('users', 'users.id = user_roles.user_id', array('username' => 'username'), 'left');
+
 
         $user_roles   = $this->getUserRolesTable()->fetchAll($select);
         $totalRecord  = $user_roles->count();
@@ -105,6 +111,19 @@ class UserRolesController extends Zf2authAppController
         $paginator->setCurrentPageNumber($page)
                 ->setItemCountPerPage($itemsPerPage)
                 ->setPageRange(7);
+
+
+        /**
+         * Set User List
+         */
+        $options = $this->getUsersTable()->dropdownUsers();
+        $searchform->get('user_id')->setOptions(array('value_options' => $options));
+
+        /**
+         * Set Resource List
+         */
+        $options = $this->getRolesTable()->dropdownRoles();
+        $searchform->get('role_id')->setOptions(array('value_options' => $options));
 
         $searchform->setData($formdata);
         $this->vm->setVariables(array(
@@ -139,6 +158,19 @@ class UserRolesController extends Zf2authAppController
                 return $this->redirect()->toRoute('user_roles');
             }
         }
+
+        /**
+         * Set User List
+         */
+        $options = $this->getUsersTable()->dropdownUsers();
+        $form->get('user_id')->setOptions(array('value_options' => $options));
+
+        /**
+         * Set Resource List
+         */
+        $options = $this->getRolesTable()->dropdownRoles();
+        $form->get('role_id')->setOptions(array('value_options' => $options));
+
         $this->vm->setVariables(array(
             'flashMessages' => $this->flashMessenger()->getMessages(),
             'form'          => $form
@@ -174,6 +206,19 @@ class UserRolesController extends Zf2authAppController
                 return $this->redirect()->toRoute('user_roles');
             }
         }
+
+        /**
+         * Set User List
+         */
+        $options = $this->getUsersTable()->dropdownUsers();
+        $form->get('user_id')->setOptions(array('value_options' => $options));
+
+        /**
+         * Set Resource List
+         */
+        $options = $this->getRolesTable()->dropdownRoles();
+        $form->get('role_id')->setOptions(array('value_options' => $options));
+
         $this->vm->setVariables(array(
             'flashMessages' => $this->flashMessenger()->getMessages(),
             'id'            => $id,
