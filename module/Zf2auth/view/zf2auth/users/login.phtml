@@ -11,7 +11,7 @@ $title = 'User Log In';
 
         <h1 class="blue"><?php echo $this->escapeHtml($title); ?></h1>
         <br>
-        <?php // echo $this->partial('application/flash-message/processMessage.phtml', array('flashMessages' => $this->flashMessages, 'error'         => $this->error)); ?>
+        <?php echo $this->partial('zf2auth/elements/message.phtml', array('flashMessages' => $this->flashMessages, 'error'         => $this->error)); ?>
         <div class="row-fluid">
             <div class="span6">
                 <div class='pad-right-20'>

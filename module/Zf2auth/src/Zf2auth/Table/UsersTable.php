@@ -50,7 +50,7 @@ class UsersTable extends AbstractTableGateway
         $data = array(
             'username'         => $formdata->username,
             'email'            => $formdata->email,
-            'password'         => $formdata->password,
+            'password'         => md5($formdata->password),
             'email_check_code' => $formdata->email_check_code,
             'is_disabled'      => $formdata->is_disabled,
             'created'          => $formdata->created,
