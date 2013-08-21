@@ -74,10 +74,6 @@ class Module
         $Zf2AuthStorage = new \Zf2auth\Model\Zf2AuthStorage;
         $userRole       = $Zf2AuthStorage->getRole();
 
-        $_SESSION['route'] = $route;
-        $_SESSION['tab'] = 0;
-
-
 //        $userRole = 'guest';
 
         if (!$e->getViewModel()->acl->hasResource($route) || !$e->getViewModel()->acl->isAllowed($userRole, $route)) {

@@ -327,7 +327,7 @@ class UsersController extends Zf2authAppController
                     $currentUser             = $user;
                 }
             }
-            
+
             $currentUser['identity'] = $email;
             $currentUser['rolename'] = 'Registered User';
             $this->getAuthService()->getStorage()->write($currentUser);
@@ -336,7 +336,6 @@ class UsersController extends Zf2authAppController
                 $redirect = 'profiles/regstep2';
             }
 
-            $this->setSessionProfileImage();
         }
         return $this->redirect()->toRoute($redirect);
     }

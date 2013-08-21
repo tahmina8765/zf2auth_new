@@ -276,7 +276,7 @@ class UsersTable extends AbstractTableGateway
         $adapter = $this->adapter;
         $select  = new Select();
         $select->from($this->table);
-        $select->join('profiles', 'profiles.user_id = users.id', array('profile_id' => 'id', 'first_name', 'last_name', 'country_id'), 'left');
+        $select->join('profiles', 'profiles.user_id = users.id', array('profile_id' => 'id', 'first_name', 'last_name'), 'left');
         $where   = new \Zend\Db\Sql\Where();
         $where->addPredicate(
                 new \Zend\Db\Sql\Predicate\Expression("(users." . $identitykey . " = '" . $identity . "')")
