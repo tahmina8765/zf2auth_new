@@ -15,7 +15,7 @@ class RoleResourcesController extends Zf2authAppController
 {
 
     public $vm;
-    protected $routerConfig;
+
 
 //    protected $role_resourcesTable;
 
@@ -34,14 +34,6 @@ class RoleResourcesController extends Zf2authAppController
 //        return $this->role_resourcesTable;
 //    }
 
-    public function getRouterConfig()
-    {
-        if (!$this->routerConfig) {
-            $sm                 = $this->getServiceLocator();
-            $this->routerConfig = $sm->get('RouterConfig');
-        }
-        return $this->routerConfig;
-    }
 
     public function bindAction()
     {

@@ -16,7 +16,6 @@ class ResourcesController extends Zf2authAppController
 
     public $vm;
 
-
 //    protected $resourcesTable;
 
     function __construct()
@@ -70,15 +69,10 @@ class ResourcesController extends Zf2authAppController
 
     public function indexAction()
     {
-
-        
-
-
         $searchform = new ResourcesSearchForm();
         $searchform->get('submit')->setValue('Search');
 
-        $select = new Select();
-
+        $select    = new Select();
         $order_by  = $this->params()->fromRoute('order_by') ?
                 $this->params()->fromRoute('order_by') : 'id';
         $order     = $this->params()->fromRoute('order') ?
@@ -138,7 +132,6 @@ class ResourcesController extends Zf2authAppController
             $resources = new Resources();
             $form->setInputFilter($resources->getInputFilter());
             $form->setData($request->getPost());
-
             if ($form->isValid()) {
                 $resources->exchangeArray($form->getData());
                 $confirm = $this->getResourcesTable()->saveResources($resources);
@@ -214,6 +207,76 @@ class ResourcesController extends Zf2authAppController
             'resources'     => $this->getResourcesTable()->getResources($id)
         ));
 
+        return $this->vm;
+    }
+
+    /**
+     * Custom functions for automated actions
+     */
+    public function refreshResourcesAction()
+    {
+
+        $form              = new ResourcesForm();
+        $newly_added       = array();
+        $delete_from_exist = array();
+//      Read All link from Module.comfig
+        $routerConfig      = $this->getRouterConfig();
+        $allNode           = array();
+        foreach ($routerConfig['routes'] as $node => $data) {
+            $allNode[] = $node;
+            if (!empty($data['child_routes'])) {
+                foreach ($data['child_routes'] as $childnode => $childdata) {
+                    $allNode[]    = $node . '/' . $childnode;
+                }
+            }
+        }
+//      Read All link from Database
+        $db_resources = $this->getResourcesTable()->fetchAll();
+
+//      Compare and add new
+        foreach ($allNode as $node) {
+            $exist = false;
+            foreach ($db_resources as $data) {
+                $link_db = $data->getName();
+                if ($link_db == $node) {
+                    $exist = true;
+                }
+            }
+            if (!$exist) {
+                $resources = new Resources();
+                $form->setInputFilter($resources->getInputFilter());
+                $formdata  = array(
+                    'name' => $node,
+                );
+                $form->setData($formdata);
+
+                if ($form->isValid()) {
+                    $resources->exchangeArray($form->getData());
+                    $confirm = $this->getResourcesTable()->saveResources($resources);
+                    if ($confirm) {
+                        $newly_added[] = $node;
+                    }
+                }
+            }
+        }
+//      Compare and delete old
+        foreach ($db_resources as $data) {
+            $exist   = true;
+            $link_db = $data->getName();
+            if (!in_array($link_db, $allNode)) {
+                $id      = (int) $data->getId();
+                $confirm = $this->getResourcesTable()->deleteResources($id);
+                if ($confirm) {
+                    $delete_from_exist[] = "[" . $id . "]" . $link_db;
+                }
+            }
+        }
+        $this->vm->setVariables(array(
+            'resources'         => $db_resources,
+            'allNode'           => $allNode,
+            'newly_added'       => $newly_added,
+            'delete_from_exist' => $delete_from_exist
+        ));
         return $this->vm;
     }
 

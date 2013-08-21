@@ -43,26 +43,26 @@ class ResourcesTable extends AbstractTableGateway
 
     public function saveResources(Resources $formdata)
     {
+        $return = false;
         $data = array(
             'name' => $formdata->name,
-		
         );
 
         $id = (int)$formdata->id;
         if ($id == 0) {
-            $this->insert($data);
+            $return = $this->insert($data);
         } else {
             if ($this->getResources($id)) {
-                $this->update($data, array('id' => $id));
+                $return = $this->update($data, array('id' => $id));
             } else {
                 throw new \Exception('Form id does not exist');
             }
         }
+        return $return;
     }
 
     public function deleteResources($id)
     {
-        $this->delete(array('id' => $id));
+        return $this->delete(array('id' => $id));
     }
 }
-            

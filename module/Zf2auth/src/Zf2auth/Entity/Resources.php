@@ -11,16 +11,13 @@ class Resources implements InputFilterAwareInterface
 {
 
     public $name;
-	
     protected $inputFilter;                       // <-- Add this variable
 
     public function exchangeArray($data)
     {
-        $this->id     = (isset($data['id'])) ? $data['id'] : null;
-	$this->name     = (isset($data['name'])) ? $data['name'] : null;
-	
+        $this->id   = (isset($data['id'])) ? $data['id'] : null;
+        $this->name = (isset($data['name'])) ? $data['name'] : null;
     }
-
 
     public function getArrayCopy()
     {
@@ -36,17 +33,16 @@ class Resources implements InputFilterAwareInterface
     {
         return $this->id;
     }
+
     public function setName($name)
-            {
-                $this->name = $name;
-            }
+    {
+        $this->name = $name;
+    }
 
-            public function getName()
-            {
-                return $this->name;
-            }
-            
-
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
@@ -67,12 +63,12 @@ class Resources implements InputFilterAwareInterface
                         ),
             )));
 
-            
+
             $inputFilter->add($factory->createInput(array(
                         'name'     => 'name',
                         'required' => true,
             )));
-            
+
 
             $this->inputFilter = $inputFilter;
         }

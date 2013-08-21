@@ -19,10 +19,20 @@ class Zf2authAppController extends AbstractActionController
     protected $rolesTable;
     protected $user_rolesTable;
     protected $usersTable;
+    protected $routerConfig;
 
     public function __construct()
     {
 //        parent::__construct();
+    }
+
+    public function getRouterConfig()
+    {
+        if (!$this->routerConfig) {
+            $sm                 = $this->getServiceLocator();
+            $this->routerConfig = $sm->get('RouterConfig');
+        }
+        return $this->routerConfig;
     }
 
     protected function getAlbumTable()
