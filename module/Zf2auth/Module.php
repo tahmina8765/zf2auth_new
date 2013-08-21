@@ -20,6 +20,11 @@ use Zf2auth\Entity\Users;
 use Zf2auth\Table\UsersTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zf2auth\Entity\Zf2AuthStorage;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\Authentication\Storage;
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
 class Module
 {
@@ -46,7 +51,8 @@ class Module
     public function getServiceConfig()
     {
         return array(
-            'factories' => array('Zf2auth\Table\AlbumTable' => function($sm) {
+            'factories' => array(
+                'Zf2auth\Table\AlbumTable' => function($sm) {
                     $dbAdapter                      = $sm->get('Zend\Db\Adapter\Adapter');
                     $table                          = new AlbumTable($dbAdapter);
                     return $table;
@@ -85,6 +91,26 @@ class Module
                     $dbAdapter       = $sm->get('Zend\Db\Adapter\Adapter');
                     $table           = new UsersTable($dbAdapter);
                     return $table;
+                },
+                'FacebookConfig' => function($sm) {   // <-- For Facebook
+                    $config                        = $sm->get('config');
+                    return $config['facebook_config'];
+                },
+                'Zf2auth\Model\Zf2AuthStorage' => function($sm) { // <-- For Authentication
+                    return new \Zf2auth\Model\Zf2AuthStorage('zf2authSession');
+                },
+                'AuthService' => function($sm) { // <-- For Authentication
+                    //My assumption, you've alredy set dbAdapter
+                    //and has users table with columns : user_name and pass_word
+                    //that password hashed with md5
+                    $dbAdapter          = $sm->get('Zend\Db\Adapter\Adapter');
+                    $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'users', 'email', 'password', 'MD5(?)');
+
+                    $authService = new AuthenticationService();
+                    $authService->setAdapter($dbTableAuthAdapter);
+                    $authService->setStorage($sm->get('Zf2auth\Model\Zf2AuthStorage'));
+
+                    return $authService;
                 },
                 'routerConfig' => function($sm) {   // <-- For router
                     $config = $sm->get('config');

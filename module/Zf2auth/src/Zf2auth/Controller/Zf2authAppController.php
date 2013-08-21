@@ -20,10 +20,37 @@ class Zf2authAppController extends AbstractActionController
     protected $user_rolesTable;
     protected $usersTable;
     protected $routerConfig;
+    public $storage;
+    public $authservice;
 
     public function __construct()
     {
 //        parent::__construct();
+    }
+
+    /**
+     *
+     * @return type
+     */
+    public function getSessionStorage()
+    {
+        if (!$this->storage) {
+            $this->storage = $this->getServiceLocator()->get('Zf2auth\Model\Zf2AuthStorage');
+        }
+
+        return $this->storage;
+    }
+
+    /**
+     *
+     * @return type
+     */
+    public function getAuthService()
+    {
+        if (!$this->authservice) {
+            $this->authservice = $this->getServiceLocator()->get('AuthService');
+        }
+        return $this->authservice;
     }
 
     public function getRouterConfig()

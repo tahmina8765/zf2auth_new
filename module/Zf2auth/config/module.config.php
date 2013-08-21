@@ -175,13 +175,6 @@ return array(
                 'type'          => 'segment',
                 'options'       => array(
                     'route'    => '/users',
-//                    'constraints' => array (
-//                        'action'   => '(?!\bpage\b)(?!\border_by\b)(?!\bsearch_by\b)[a-zA-Z][a-zA-Z0-9_-]*',
-//                        'id'       => '[0-9]+',
-//                        'page'     => '[0-9]+',
-//                        'order_by' => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                        'order'    => 'ASC|DESC',
-//                    ),
                     'defaults' => array(
                         'controller' => 'Zf2auth\Controller\Users',
                         'action'     => 'index',

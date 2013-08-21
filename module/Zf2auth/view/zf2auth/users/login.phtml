@@ -1,0 +1,69 @@
+<?php
+$title = 'User Log In';
+?>
+<style type="text/css">
+    input[type='checkbox']{
+        margin-top: 0px;
+    }
+</style>
+<div class="row-fluid">
+
+
+        <h1 class="blue"><?php echo $this->escapeHtml($title); ?></h1>
+        <br>
+        <?php // echo $this->partial('application/flash-message/processMessage.phtml', array('flashMessages' => $this->flashMessages, 'error'         => $this->error)); ?>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class='pad-right-20'>
+                    <?php
+                    $form = $this->form;
+                    $form->setAttribute('action', $this->url('users/authenticate'));
+                    $form->prepare();
+                    echo $this->form()->openTag($form);
+                    foreach ($form as $element) :
+                        ?>
+                        <div class="control-group <?php if ($this->formElementErrors($element)) echo "error" ?>">
+                            <label class="control-label" style="text-align: left;"><?php echo $element->getLabel() ?></label>
+                            <div style="text-align: left;">
+                                <?php
+                                echo $this->formElement($element);
+                                if ($this->formElementErrors($element)):
+                                    ?>
+                                    <span class="help-inline"><?php echo $this->formElementErrors($element); ?></span>
+                                    <?php
+                                endif;
+                                ?>
+                            </div>
+                        </div>
+                        <?php
+                    endforeach;
+
+                    echo $this->form()->closeTag();
+                    ?>
+                </div>
+
+            </div>
+            <div class="span6" style="border-left: 1px solid #ccc;">
+                <h2 class="blue">Not a Member Yet?</h2>
+                <h5 class="black">Sign Up Now &ndash; It´s Free!</h5>
+                <div>
+                    <a class="btn btn-large btn-success btn-hossbrag join-now" href="<?php echo $this->url('users/registration'); ?>">Join Now</a>
+                </div>
+                <div class='pad-right-10'>
+                    <div class="black pad-10">
+                        <strong>Sign Up with Facebook</strong>
+                    </div>
+                    <div>
+                        <a href="<?php echo $this->url('fbprofiles', array('action' => 'registration')); ?>"
+                           class="btn btn-primary btn-hossbrag pad-bottom-05 pad-left-05">
+                            <i class="icon-fb icon-white push-left"></i><i class="vrtdivider"></i>Sign Up with Facebook</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+</div>
+
+
+

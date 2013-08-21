@@ -77,5 +77,26 @@ class RoleResourcesTable extends AbstractTableGateway
         $this->delete(array('id' => $id));
     }
 
+    public function getResourcesBasedOnRole($role_id)
+    {
+        $adapter = $this->adapter;
+        $select  = new Select();
+        $select->from($this->table);
+
+        $select->join('resources', 'resources.id = role_resources.resource_id', array('resource_name' => 'name'), 'left');
+        $select->where('role_id =' . $role_id);
+        // $resultSet = $this->selectWith($select);
+//        echo $role_id;
+//        echo $select->getSqlString();
+//        die();
+        $sql       = new Sql($adapter);
+        $statement = $sql->getSqlStringForSqlObject($select);
+        $resultSet = $adapter->query($statement, $adapter::QUERY_MODE_EXECUTE);
+        $resultSet->buffer();
+
+
+        return $resultSet;
+    }
+
 }
 
