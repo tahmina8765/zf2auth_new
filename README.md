@@ -66,10 +66,6 @@ Add the following function in Application/Module.php
         $_SESSION['route'] = $route;
         $_SESSION['tab'] = 0;
 
-
-
-//        $userRole = 'guest';
-//
         if (!$e->getViewModel()->acl->hasResource($route) || !$e->getViewModel()->acl->isAllowed($userRole, $route)) {
             $response = $e->getResponse();
             //location to page or what ever
@@ -81,6 +77,8 @@ Add the following function in Application/Module.php
 Step - 4
 ======================
 Add the following function in Application/Module.php
+
+
     public function getServiceConfig()
     {
         return array(
