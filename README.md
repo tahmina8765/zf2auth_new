@@ -48,37 +48,8 @@ Add the following function in Application/Module.php
                     $allowd_resources[] = $row;
                     $acl->allow($role_name, $row->resource_name);
                 }
-//                echo "<pre>";
-//                print_r($allowd_resources);
-//                die();
             }
         }
-
-        /*
-          $roles = include __DIR__ . '/config/module.acl.roles.php';
-          $allResources = array ();
-          foreach ($roles as $role => $resources) {
-
-          $role = new \Zend\Permissions\Acl\Role\GenericRole($role);
-          $acl->addRole($role);
-
-          $allResources = array_merge($resources, $allResources);
-
-          //adding resources
-          foreach ($resources as $resource) {
-          $acl->addResource(new \Zend\Permissions\Acl\Resource\GenericResource($resource));
-          }
-          //adding restrictions
-          foreach ($allResources as $resource) {
-          $acl->allow($role, $resource);
-          }
-          // $acl->allow($role, 'index', array('index'));
-          }
-          //testing
-          //var_dump($acl->isAllowed('admin','home'));
-          //true
-          //setting to view
-         */
         $e->getViewModel()->acl = $acl;
     }
 
